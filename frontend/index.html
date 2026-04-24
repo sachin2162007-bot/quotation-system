@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndustrialPro — Product Catalogue</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="brand-icon">⚙</div>
+      <span class="brand-name">Industrial<span>Pro</span></span>
+    </div>
+    <div class="header-actions">
+      <a href="admin.html" style="font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-secondary);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--orange)'" onmouseout="this.style.color='var(--text-secondary)'">Admin</a>
+      <button class="cart-btn" id="cartToggleBtn" onclick="toggleCart()">
+        🛒 Cart
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO STRIP -->
+  <section class="hero-strip">
+    <h1>Industrial <em>Products</em><br>Catalogue</h1>
+    <p>Browse our range of precision-engineered industrial components. Add to cart and request a custom quotation.</p>
+  </section>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-category="all" onclick="setFilter('all', this)">All</button>
+  </div>
+
+  <!-- PRODUCT GRID -->
+  <main class="main-content">
+    <div class="product-grid" id="productGrid">
+      <!-- Skeleton loaders -->
+      ${Array(6).fill('').map(() => `
+        <div class="product-card" style="pointer-events:none;">
+          <div class="skeleton" style="width:100%;aspect-ratio:4/3;"></div>
+          <div class="card-body">
+            <div class="skeleton" style="height:12px;width:60%;border-radius:4px;"></div>
+            <div class="skeleton" style="height:20px;width:85%;border-radius:4px;margin-top:8px;"></div>
+            <div class="skeleton" style="height:12px;width:100%;border-radius:4px;margin-top:8px;"></div>
+          </div>
+          <div class="card-footer">
+            <div class="skeleton" style="height:24px;width:80px;border-radius:4px;"></div>
+            <div class="skeleton" style="height:34px;width:100px;border-radius:4px;"></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </main>
+
+  <!-- CART OVERLAY + SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>🛒 Quotation Cart</h2>
+      <button class="cart-close-btn" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty-msg" id="cartEmptyMsg">
+        <span style="font-size:40px;opacity:0.3;">📦</span>
+        <span>Cart is empty</span>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total Estimate</span>
+        <span class="cart-total-value" id="cartTotal">₹0</span>
+      </div>
+      <input
+        class="quotation-email-input"
+        type="email"
+        id="quotationEmail"
+        placeholder="Your email address"
+        autocomplete="email"
+      >
+      <button class="send-quotation-btn" id="sendQuotationBtn" onclick="sendQuotation()" disabled>
+        📧 Send Quotation
+      </button>
+    </div>
+  </aside>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

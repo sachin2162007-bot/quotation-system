@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndustrialPro — Admin Panel</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ==================== LOGIN PAGE ==================== -->
+  <div class="login-page" id="loginPage">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-hex"></div>
+        <div>
+          <div class="login-title">IndustrialPro</div>
+        </div>
+      </div>
+      <div class="login-subtitle">Admin Panel Access</div>
+      <div class="login-error" id="loginError">Invalid username or password.</div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-input" type="text" id="loginUsername" placeholder="admin" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')handleLogin()">
+      </div>
+      <button class="btn btn-primary btn-full" id="loginBtn" onclick="handleLogin()">
+        Sign In →
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN LAYOUT ==================== -->
+  <div class="admin-layout" id="adminLayout">
+
+    <!-- Top Bar -->
+    <header class="admin-topbar">
+      <div class="admin-brand">
+        <div class="admin-brand-hex"></div>
+        <span class="admin-brand-name">IndustrialPro</span>
+        <span class="admin-brand-badge">Admin</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="index.html" class="btn btn-secondary btn-sm">← View Store</a>
+        <button class="btn btn-danger btn-sm" onclick="handleLogout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <!-- Stats Row -->
+      <div class="admin-stats-row" id="statsRow">
+        <div class="stat-card">
+          <div class="stat-card-label">Total Products</div>
+          <div class="stat-card-value" id="statTotal">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Categories</div>
+          <div class="stat-card-value" id="statCategories">—</div>
+        </div>
+      </div>
+
+      <!-- Header Row -->
+      <div class="admin-header-row">
+        <h1 class="admin-page-title">Product Management</h1>
+        <button class="btn btn-primary" onclick="openAddModal()">＋ Add Product</button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table class="data-table" id="productTable">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Size / Dims</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody">
+            <tr>
+              <td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Loading products…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADD / EDIT MODAL ==================== -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Add Product</h2>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal()">✕ Close</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editProductId">
+
+        <div class="form-group">
+          <label class="form-label">Product Name *</label>
+          <input class="form-input" type="text" id="fieldName" placeholder="e.g. Hex Bolt Grade 8.8" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <input class="form-input" type="text" id="fieldCategory" placeholder="e.g. Fasteners" list="categoryList" required>
+            <datalist id="categoryList"></datalist>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price (₹) *</label>
+            <input class="form-input" type="number" id="fieldPrice" placeholder="0" min="0" step="0.01" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Size</label>
+            <input class="form-input" type="text" id="fieldSize" placeholder="e.g. M10, 1/2 inch">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dimensions</label>
+            <input class="form-input" type="text" id="fieldDimensions" placeholder="e.g. 100×50×25 mm">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" id="fieldDescription" placeholder="Product specifications, use-case, material…"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Product Image</label>
+          <div class="image-upload-area" id="uploadArea"
+            ondragover="event.preventDefault();this.classList.add('drag-over')"
+            ondragleave="this.classList.remove('drag-over')"
+            ondrop="handleDrop(event)">
+            <input type="file" id="fieldImage" accept="image/*" onchange="previewImage(this)">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">Click or drag & drop to upload</div>
+            <div class="upload-hint">JPG, PNG, WebP · Max 5 MB</div>
+          </div>
+          <img class="image-preview" id="imagePreview" alt="Preview">
+          <div id="existingImageNote" style="font-size:12px;color:var(--text-muted);margin-top:6px;display:none;">Current image will be kept if no new file is selected.</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" id="saveProductBtn" onclick="saveProduct()">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DELETE CONFIRM MODAL ==================== -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal" style="max-width:400px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirm Delete</h2>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-secondary);">Are you sure you want to delete <strong id="deleteProductName" style="color:var(--text-primary);">this product</strong>? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

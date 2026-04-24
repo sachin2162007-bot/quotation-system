@@ -34,10 +34,10 @@ async function handleLogin() {
   errEl.style.display = 'none';
 
   try {
-    const res = await fetch(`${API_BASE}/login`, {
+    const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ email: username, password })
     });
 
     const data = await res.json();

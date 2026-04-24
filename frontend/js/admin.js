@@ -2,7 +2,7 @@
    INDUSTRIAL QUOTATION SYSTEM — admin.js
    ============================================ */
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://quotation-system-6fxw.onrender.com/api';
 
 let products = [];
 let deleteTargetId = null;
@@ -75,7 +75,7 @@ function getToken() {
 
 async function loadProducts() {
   try {
-    const res = await fetch(`${API_BASE}/get-products`);
+    const res = await fetch(`${API_BASE}/products`);
     products = await res.json();
     renderTable();
     updateStats();
